@@ -22,7 +22,6 @@ class ProxyManager
             return;
         }
 
-        ShowHelp();
         // Interactive mode
         InteractiveMode();
     }
@@ -34,26 +33,21 @@ class ProxyManager
         switch (command)
         {
             case "check":
-            case "c":
             case "status":
-            case "s":
                 CheckProxyStatus();
                 break;
 
             case "get":
-            case "g":
             case "show":
-            case "w":
                 GetProxySettings();
                 break;
 
             case "set":
-            case "t":
                 if (args.Length < 2)
                 {
-                    PrintError("❌ Format: proxymgr set/t <proxy_server> [bypass_list]");
-                    PrintInfo("💡 Example: proxymgr set/t 127.0.0.1:8080");
-                    PrintInfo("💡 Example: proxymgr set/t 127.0.0.1:8080 \"<local>;*.example.com\"");
+                    PrintError("❌ Format: dotnet run set <proxy_server> [bypass_list]");
+                    PrintInfo("💡 Example: dotnet run set 127.0.0.1:8080");
+                    PrintInfo("💡 Example: dotnet run set 127.0.0.1:8080 \"<local>;*.example.com\"");
                     return;
                 }
                 string proxyServer = args[1];
@@ -62,29 +56,20 @@ class ProxyManager
                 break;
 
             case "disable":
-            case "d":
             case "off":
                 DisableProxy();
                 break;
 
-            case "enable":
-            case "e":
-            case "a":
-            case "on":
-                EnableProxy();
-                break;
-
             case "bypass":
-            case "b":
                 if (args.Length < 2)
                 {
-                    PrintError("❌ Format: proxymgr bypass/b <action> [value]");
+                    PrintError("❌ Format: dotnet run bypass <action> [value]");
                     PrintInfo("💡 Actions: set, add, remove, clear, show");
-                    PrintInfo("💡 Example: proxymgr bypass/b set \"<local>;*.internal.com\"");
-                    PrintInfo("💡 Example: proxymgr bypass/b add \"*.example.com\"");
-                    PrintInfo("💡 Example: proxymgr bypass/b remove \"*.example.com\"");
-                    PrintInfo("💡 Example: proxymgr bypass/b clear");
-                    PrintInfo("💡 Example: proxymgr bypass/b show");
+                    PrintInfo("💡 Example: dotnet run bypass set \"<local>;*.internal.com\"");
+                    PrintInfo("💡 Example: dotnet run bypass add \"*.example.com\"");
+                    PrintInfo("💡 Example: dotnet run bypass remove \"*.example.com\"");
+                    PrintInfo("💡 Example: dotnet run bypass clear");
+                    PrintInfo("💡 Example: dotnet run bypass show");
                     return;
                 }
                 string bypassAction = args[1].ToLower();
@@ -94,7 +79,6 @@ class ProxyManager
 
             case "help":
             case "-h":
-            case "h":
             case "--help":
                 ShowHelp();
                 break;
@@ -111,33 +95,32 @@ class ProxyManager
         PrintHeader("🔧 Windows Proxy Manager - Help");
         Console.WriteLine();
         PrintSuccess("Interactive Mode (no arguments):");
-        Console.WriteLine("  proxymgr");
+        Console.WriteLine("  dotnet run");
         Console.WriteLine();
         PrintSuccess("Command Line Mode:");
-        Console.WriteLine("  proxymgr check/status/c/s         🔍 Check proxy status");
-        Console.WriteLine("  proxymgr get/show/g/w             📋 Show proxy settings");
-        Console.WriteLine("  proxymgr set/t <server>           ⚙️ Set proxy server");
-        Console.WriteLine("  proxymgr set/t <server> <bypass>  ⚙️ Set proxy with bypass list");
-        Console.WriteLine("  proxymgr disable/off/d            ⛔ Disable proxy");
-        Console.WriteLine("  proxymgr enable/e/a/on            ✅ Enable proxy");
-        Console.WriteLine("  proxymgr bypass/b <action>        🚫 Manage bypass list");
-        Console.WriteLine("  proxymgr help/--help/h/-h         📖 Show help");
+        Console.WriteLine("  dotnet run check              🔍 Check proxy status");
+        Console.WriteLine("  dotnet run get                📋 Show proxy settings");
+        Console.WriteLine("  dotnet run set <server>       ⚙️  Set proxy server");
+        Console.WriteLine("  dotnet run set <server> <bypass>  Set proxy with bypass list");
+        Console.WriteLine("  dotnet run disable            ⛔ Disable proxy");
+        Console.WriteLine("  dotnet run bypass <action>    🚫 Manage bypass list");
+        Console.WriteLine("  dotnet run help               📖 Show help");
         Console.WriteLine();
         PrintSuccess("Bypass List Actions:");
-        Console.WriteLine("  proxymgr bypass/b show/s          📋 Show current bypass list");
-        Console.WriteLine("  proxymgr bypass/b set/t <list>    ⚙️ Set/replace bypass list");
-        Console.WriteLine("  proxymgr bypass/b add/a <item>    ➕ Add item to bypass list");
-        Console.WriteLine("  proxymgr bypass/b remove/r <item> ➖ Remove item from bypass list");
-        Console.WriteLine("  proxymgr bypass/b clear/c         🗑️ Clear all bypass list");
+        Console.WriteLine("  dotnet run bypass show        📋 Show current bypass list");
+        Console.WriteLine("  dotnet run bypass set <list>  ⚙️  Set/replace bypass list");
+        Console.WriteLine("  dotnet run bypass add <item>  ➕ Add item to bypass list");
+        Console.WriteLine("  dotnet run bypass remove <item> ➖ Remove item from bypass list");
+        Console.WriteLine("  dotnet run bypass clear       🗑️  Clear all bypass list");
         Console.WriteLine();
         PrintInfo("💡 Examples:");
         Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine("   proxymgr set/t 127.0.0.1:8080");
-        Console.WriteLine("   proxymgr set/t 192.168.1.100:3128 \"<local>;*.internal.com\"");
-        Console.WriteLine("   proxymgr check/c");
-        Console.WriteLine("   proxymgr disable/d");
-        Console.WriteLine("   proxymgr bypass/b add/a \"*.example.com\"");
-        Console.WriteLine("   proxymgr bypass/b remove/r \"<local>\"");
+        Console.WriteLine("  dotnet run set 127.0.0.1:8080");
+        Console.WriteLine("  dotnet run set 192.168.1.100:3128 \"<local>;*.internal.com\"");
+        Console.WriteLine("  dotnet run check");
+        Console.WriteLine("  dotnet run disable");
+        Console.WriteLine("  dotnet run bypass add \"*.example.com\"");
+        Console.WriteLine("  dotnet run bypass remove \"<local>\"");
         Console.ResetColor();
     }
 
@@ -151,12 +134,12 @@ class ProxyManager
             PrintSuccess("╔══════════════════════════════╗");
             PrintSuccess("║     Choose Operation:        ║");
             PrintSuccess("╠══════════════════════════════╣");
-            Console.WriteLine("║  1⃣  🦜 Check Proxy Status   ║");
-            Console.WriteLine("║  2⃣  🐧 Get Proxy Settings   ║");
-            Console.WriteLine("║  3⃣  🐞 Set Proxy            ║");
-            Console.WriteLine("║  4⃣  🐨 Disable Proxy        ║");
-            Console.WriteLine("║  5⃣  👘 Manage Bypass List   ║");
-            Console.WriteLine("║  6⃣  ❌ Exit (x/q)           ║"); 
+            Console.WriteLine("║  1⃣  🦜 Check Proxy Status      ║");
+            Console.WriteLine("║  2⃣  🐧 Get Proxy Settings      ║");
+            Console.WriteLine("║  3⃣  🐞 Set Proxy               ║");
+            Console.WriteLine("║  4⃣  🐨 Disable Proxy           ║");
+            Console.WriteLine("║  5⃣  👘 Manage Bypass List      ║");
+            Console.WriteLine("║  6⃣  ❌ Exit                    ║");
             PrintSuccess("╚══════════════════════════════╝");
             Console.Write("\n👉 Your choice (1-6): ");
 
@@ -180,10 +163,7 @@ class ProxyManager
                     ManageBypassListInteractive();
                     break;
                 case "6":
-                case "q":
-                case "x":
-                    // PrintSuccess("\n👋 Thank you for using Proxy Manager!");
-                    PrintSuccess("\n👋 Exit/Quit Proxy Manager!");
+                    PrintSuccess("\n👋 Thank you for using Proxy Manager!");
                     return;
                 default:
                     PrintError("❌ Invalid choice!");
@@ -347,11 +327,11 @@ class ProxyManager
             {
                 key.SetValue("ProxyOverride", bypassList);
             }
-            // else
-            // {
-            //     // Set default bypass for localhost
-            //     key.SetValue("ProxyOverride", "<local>");
-            // }
+            else
+            {
+                // Set default bypass for localhost
+                key.SetValue("ProxyOverride", "<local>");
+            }
             
             // Enable proxy
             key.SetValue("ProxyEnable", 1, RegistryValueKind.DWord);
@@ -447,62 +427,6 @@ class ProxyManager
         }
     }
 
-    static void EnableProxy()
-    {
-        try
-        {
-            Console.WriteLine();
-            PrintHeader("✅ Enabling Proxy...");
-
-            using RegistryKey? key = Registry.CurrentUser.OpenSubKey(ProxyRegistryPath, true);
-            
-            if (key == null)
-            {
-                PrintError("❌ Cannot access proxy registry");
-                return;
-            }
-
-            // Get current proxy before disabling
-            object? proxyServer = key.GetValue("ProxyServer");
-            object? proxyOverride = key.GetValue("ProxyOverride");
-
-            // Disable proxy
-            key.SetValue("ProxyEnable", 1, RegistryValueKind.DWord);
-
-            Console.WriteLine();
-            PrintSuccess("╔════════════════════════════════════════════════╗");
-            PrintSuccess("║  ✅ Proxy Successfully Enabled!               ║");
-            PrintSuccess("╚════════════════════════════════════════════════╝");
-
-            // Show what was disabled
-            if (proxyServer != null && !string.IsNullOrWhiteSpace(proxyServer.ToString()))
-            {
-                Console.WriteLine();
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("📝 Enable proxy configuration:");
-                Console.WriteLine($"   🌐 Server : {proxyServer}");
-                Console.WriteLine($"   🚫 Bypass : {proxyOverride ?? "(not set)"}");
-                Console.ResetColor();
-            }
-
-            // Notify system
-            Console.WriteLine();
-            PrintInfo("⏳ Notifying system...");
-            if (NotifyProxyChange())
-            {
-                PrintSuccess("✅ System successfully notified - Changes are now active! 🚀");
-            }
-            else
-            {
-                PrintWarning("⚠️  Failed to notify system - May need to restart applications");
-            }
-        }
-        catch (Exception ex)
-        {
-            PrintError($"❌ Error: {ex.Message}");
-        }
-    }
-
     static bool NotifyProxyChange()
     {
         try
@@ -527,45 +451,37 @@ class ProxyManager
         switch (action)
         {
             case "show":
-            case "s":
-            case "g":
-            case "get":
                 ShowBypassList();
                 break;
             case "set":
-            case "t":
                 if (string.IsNullOrWhiteSpace(value))
                 {
                     PrintError("❌ Value required for 'set' action");
-                    PrintInfo("💡 Example: proxymgr bypass set \"<local>;*.internal.com\"");
+                    PrintInfo("💡 Example: dotnet run bypass set \"<local>;*.internal.com\"");
                     return;
                 }
                 SetBypassList(value);
                 break;
             case "add":
-            case "a":
                 if (string.IsNullOrWhiteSpace(value))
                 {
                     PrintError("❌ Value required for 'add' action");
-                    PrintInfo("💡 Example: proxymgr bypass add \"*.example.com\"");
+                    PrintInfo("💡 Example: dotnet run bypass add \"*.example.com\"");
                     return;
                 }
                 AddToBypassList(value);
                 break;
             case "remove":
-            case "r":
             case "delete":
-            case "d":
                 if (string.IsNullOrWhiteSpace(value))
                 {
                     PrintError("❌ Value required for 'remove' action");
-                    PrintInfo("💡 Example: proxymgr bypass remove \"*.example.com\"");
+                    PrintInfo("💡 Example: dotnet run bypass remove \"*.example.com\"");
                     return;
                 }
                 RemoveFromBypassList(value);
                 break;
             case "clear":
-            case "c":
                 ClearBypassList();
                 break;
             default:
